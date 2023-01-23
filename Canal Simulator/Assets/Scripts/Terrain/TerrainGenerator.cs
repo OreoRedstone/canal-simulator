@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Terrain))]
-public class TerrainGeneratorForBuiltin : MonoBehaviour
+public class TerrainGenerator : MonoBehaviour
 {
     public int width = 256; // X-axis of the terrain.
     public int height = 256; // Z-axis
@@ -19,12 +19,13 @@ public class TerrainGeneratorForBuiltin : MonoBehaviour
     {
         seed.x = UnityEngine.Random.Range(0f, 9999f);
         seed.y = UnityEngine.Random.Range(0f, 9999f);
-
+        /*
         Terrain terrain = GetComponent<Terrain>();
         if (terrain.terrainData != null)
-            terrain.terrainData = GenerateTerrain(terrain.terrainData, width, height, depth, persistence, lacunarity, octaves, seed, scale);
+            terrain.terrainData = GenerateTerrain(terrain.terrainData);
         else
-            terrain.terrainData= GenerateTerrain(new TerrainData(), width, height, depth, persistence, lacunarity, octaves, seed, scale);
+            terrain.terrainData= GenerateTerrain(new TerrainData());
+        */
     }
 
     private void Update()
@@ -37,7 +38,7 @@ public class TerrainGeneratorForBuiltin : MonoBehaviour
     }
 
     // This generates a terrain data from a give heightmap.
-    TerrainData GenerateTerrain(TerrainData terrainData, int width, int height, float depth, float persistence, float lacunarity, int octaves, Vector2 seed, float scale)
+    public TerrainData GenerateTerrain(TerrainData terrainData)
     {
         terrainData.heightmapResolution = width + 1;
         terrainData.size = new Vector3(width, depth, height);
