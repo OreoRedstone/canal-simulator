@@ -1,2 +1,2 @@
 # Canal Simulator
-Welcome to the GitHub for Canal Simulator. Here you can share bugs, download and build the latest experimental version for yourself, and contribute to the project if you wish.
+The Greatest indie title of 2150 (or whenever we get it playable)
