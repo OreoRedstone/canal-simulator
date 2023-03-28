@@ -11,7 +11,9 @@ public class TerrainMerger : MonoBehaviour
     private void Start()
     {
         mainTerrain = GetComponent<TerrainGenerator>().GenerateTerrain(new TerrainData());
-        GetComponent<Terrain>().terrainData = MergeTerrain(mainTerrain, canalTerrain);
+        TerrainData newData = MergeTerrain(mainTerrain, canalTerrain);
+        GetComponent<Terrain>().terrainData = newData;
+        GetComponent<TerrainCollider>().terrainData = newData;
         //GetComponent<Terrain>().terrainData = mainTerrain;
     }
 

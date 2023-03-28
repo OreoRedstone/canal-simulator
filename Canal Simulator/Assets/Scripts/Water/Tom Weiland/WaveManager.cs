@@ -48,6 +48,6 @@ public class WaveManager : MonoBehaviour
 
     public float GetWaveHeight(float x, float y)
     {
-        return Mathf.PerlinNoise(x / size.x + offset.x, y / size.y + offset.y) * amplitude;
+        return Mathf.PerlinNoise((x / size.x) + offset.x, (y / size.y) + offset.y) * amplitude;
     }
 }

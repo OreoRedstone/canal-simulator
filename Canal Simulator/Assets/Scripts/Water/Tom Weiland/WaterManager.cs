@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,11 +21,14 @@ public class WaterManager : MonoBehaviour
         Vector3[] verticies = meshFilter.mesh.vertices;
         for (int i = 0; i < verticies.Length; i++)
         {
-            verticies[i].y = WaveManager.instance.GetWaveHeight(transform.position.x + verticies[i].x * transform.localScale.x, transform.position.z + verticies[i].z * transform.localScale.z);
+            verticies[i].y = WaveManager.instance.GetWaveHeight(transform.TransformPoint(verticies[i]).x, transform.TransformPoint(verticies[i]).z);
         }
 
         meshFilter.mesh.vertices = verticies;
         meshFilter.mesh.RecalculateNormals();
+        meshFilter.mesh.RecalculateBounds();
+        meshFilter.mesh.RecalculateTangents();
+
 
         /*Vector3[] verticies = meshFilter.mesh.vertices;
         for (int i = 0; i < verticies.Length; i++)
