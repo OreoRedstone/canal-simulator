@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Tests/TerrainGeneration.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Main Menu.unity
+    guid: 264b269fc3b5fc746bc7487ebdb5b175
+  - enabled: 1
+    path: Assets/Scenes/Time Trials/Time Trial 1.unity
+    guid: 79ef854590e65894bb1cd07c9ae16fcf
   m_configObjects: {}

@@ -10,6 +10,7 @@ public class Boat : MonoBehaviour
     public float boatMaxSpeed;
     public float turboModifier;
     public bool turbo;
+    public float fuelUsageModifier = 1f;
 
     public float rpm;
     private RectTransform tachoIndicator;
@@ -23,14 +24,29 @@ public class Boat : MonoBehaviour
     private float rudderRotation;
     private GameObject motor;
     private Rigidbody rb;
+    private GameObject bow;
+
+    public float waterLevel;
+    public float waterDrag;
+    public float waterAngularDrag;
 
     // Start is called before the first frame update
     void Start()
     {
+        bow = GameObject.Find("Bow");
         motor = GameObject.Find("Motor");
         rb = transform.GetComponent<Rigidbody>();
         tachoIndicator = GameObject.Find("TachoIndicatorParent").GetComponent<RectTransform>();
-        fuelIndicator = GameObject.Find("FuelIndicatorParent").GetComponent<RectTransform>();
+        if (fuelUsageModifier != 0f)
+        {
+            fuelIndicator = GameObject.Find("FuelIndicatorParent").GetComponent<RectTransform>();
+        }
+
+        Floater[] floaters = GetComponentsInChildren<Floater>();
+        foreach (Floater floater in floaters)
+        {
+            floater.UpdateValues(waterLevel, floaters.Length, waterDrag, waterAngularDrag);
+        }
     }
 
     // Update is called once per frame
@@ -55,25 +71,25 @@ public class Boat : MonoBehaviour
             rudderRotation = Convert.ToInt32(keyboard.dKey.isPressed) - Convert.ToInt32(keyboard.aKey.isPressed);
         }
 
-        motor.transform.localEulerAngles = new Vector3(0, rudderRotation * 30, 0);
+        motor.transform.localEulerAngles = new Vector3(0, rudderRotation * 50, 0);
 
         //(Mathf.Cos(Vector3.Angle(motor.transform.forward, rb.velocity)) * Mathf.Sqrt(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2)))
 
         rpm += Time.deltaTime * Mathf.Abs(throttle) * 3000000 * hpModifier * Mathf.Sqrt(2000-rpm);
-        if(rpm > 0)
+        if(rpm > 800)
         {
             rpm -= Time.deltaTime * 200;
         }
         else
         {
-            rpm = 0;
+            rpm = 800 + UnityEngine.Random.Range(-10, 10);
         }
         if(rpm > 2000)
         {
-            rpm = 1980;
+            rpm = 2000 + UnityEngine.Random.Range(-50, 50);
         }
 
-        fuelLevel -= Time.deltaTime * Mathf.Pow(rpm, 3) * fuelUsageRate * 0.00000000001f;
+        fuelLevel -= Time.deltaTime * Mathf.Pow(rpm, 3) * fuelUsageRate * 0.00000000001f * fuelUsageModifier;
         if(fuelLevel > maxFuelLevel)
         {
             fuelLevel = maxFuelLevel;
@@ -83,7 +99,10 @@ public class Boat : MonoBehaviour
             fuelLevel = 0;
         }
 
-        fuelIndicator.localEulerAngles = new Vector3(0, 0, (fuelLevel / maxFuelLevel) * -180);
+        if(fuelUsageModifier != 0f)
+        {
+            fuelIndicator.localEulerAngles = new Vector3(0, 0, (fuelLevel / maxFuelLevel) * -180);
+        }
         tachoIndicator.localEulerAngles = new Vector3(0, 0, (rpm/2000) * -180);
     }
 
@@ -97,13 +116,18 @@ public class Boat : MonoBehaviour
         {
             rb.AddForceAtPosition(motor.transform.forward * throttle * boatAcceleration, motor.transform.position);
         }*/
-        if(throttle > 0)
+        if(rb.velocity.magnitude < boatMaxSpeed)
         {
-            rb.AddForceAtPosition(motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
-        }
-        if(throttle < 0)
-        {
-            rb.AddForceAtPosition(-motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
+            if (throttle > 0)
+            {
+                rb.AddForceAtPosition(motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
+                rb.AddForceAtPosition(-motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier * 0.5f, bow.transform.position);
+            }
+            if (throttle < 0)
+            {
+                rb.AddForceAtPosition(-motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
+                rb.AddForceAtPosition(motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier * 0.5f, bow.transform.position);
+            }
         }
     }
 }
