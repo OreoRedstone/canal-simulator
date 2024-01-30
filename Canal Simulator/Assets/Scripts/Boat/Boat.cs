@@ -108,26 +108,10 @@ public class Boat : MonoBehaviour
 
     private void FixedUpdate()
     {
-        /*if(turbo)
-        {
-            rb.AddForceAtPosition(motor.transform.forward * throttle * turboModifier * boatAcceleration, motor.transform.position);
-        }
-        else
-        {
-            rb.AddForceAtPosition(motor.transform.forward * throttle * boatAcceleration, motor.transform.position);
-        }*/
-        if(rb.velocity.magnitude < boatMaxSpeed)
-        {
-            if (throttle > 0)
-            {
-                rb.AddForceAtPosition(motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
-                rb.AddForceAtPosition(-motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier * 0.5f, bow.transform.position);
-            }
-            if (throttle < 0)
-            {
-                rb.AddForceAtPosition(-motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier, motor.transform.position);
-                rb.AddForceAtPosition(motor.transform.forward * Mathf.Pow(rpm, 3) * hpModifier * 0.5f, bow.transform.position);
-            }
-        }
+        if (rb.velocity.magnitude >= boatMaxSpeed * (turbo ? turboModifier : 1)) return;
+        if (throttle == 0) return;
+
+        rb.AddForceAtPosition(hpModifier * Mathf.Pow(rpm, 3) * motor.transform.forward, motor.transform.position * throttle / Math.Abs(throttle) * (turbo ? turboModifier : 1));
+        rb.AddForceAtPosition(0.5f * hpModifier * Mathf.Pow(rpm, 3) * -motor.transform.forward, bow.transform.position * throttle / Math.Abs(throttle) * (turbo ? turboModifier : 1));
     }
 }

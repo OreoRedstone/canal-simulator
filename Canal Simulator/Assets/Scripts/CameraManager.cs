@@ -22,6 +22,8 @@ public class CameraManager : MonoBehaviour
         Gamepad gamepad = Gamepad.current;
         Keyboard keyboard = Keyboard.current;
 
+        if (gamepad == null) return;
+
         if(gamepad.triangleButton.wasPressedThisFrame)
         {
             cameras[currentCamera].Priority -= 1;
