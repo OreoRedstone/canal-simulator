@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,6 +10,7 @@ public class CameraManager : MonoBehaviour
 {
     public List<CinemachineVirtualCamera> cameras;
     public int currentCamera = 0;
+    public TextMeshProUGUI fpsCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -40,5 +42,7 @@ public class CameraManager : MonoBehaviour
         }
 
         cameras[currentCamera].transform.rotation = new Quaternion(cameras[currentCamera].transform.rotation.x, cameras[currentCamera].transform.rotation.y, 0, cameras[currentCamera].transform.rotation.w);
+
+        fpsCounter.text = Mathf.RoundToInt(1 / Time.deltaTime).ToString();
     }
 }

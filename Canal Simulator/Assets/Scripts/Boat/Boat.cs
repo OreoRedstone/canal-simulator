@@ -20,7 +20,7 @@ public class Boat : MonoBehaviour
     private RectTransform fuelIndicator;
     public float fuelUsageRate = 0.22f;
 
-    private float throttle;
+    public float throttle;
     private float rudderRotation;
     private GameObject motor;
     private Rigidbody rb;
@@ -111,7 +111,7 @@ public class Boat : MonoBehaviour
         if (rb.velocity.magnitude >= boatMaxSpeed * (turbo ? turboModifier : 1)) return;
         if (throttle == 0) return;
 
-        rb.AddForceAtPosition(hpModifier * Mathf.Pow(rpm, 3) * motor.transform.forward, motor.transform.position * throttle / Math.Abs(throttle) * (turbo ? turboModifier : 1));
-        rb.AddForceAtPosition(0.5f * hpModifier * Mathf.Pow(rpm, 3) * -motor.transform.forward, bow.transform.position * throttle / Math.Abs(throttle) * (turbo ? turboModifier : 1));
+        rb.AddForceAtPosition(hpModifier * Mathf.Pow(rpm, 3) * motor.transform.forward, motor.transform.position * throttle / Math.Abs(throttle));
+        rb.AddForceAtPosition(0.5f * hpModifier * Mathf.Pow(rpm, 3) * -motor.transform.forward, bow.transform.position * throttle / Math.Abs(throttle));
     }
 }
